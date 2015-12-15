@@ -3,7 +3,7 @@
   "description": "Typeahead, written using the React.js library.",
   "author": "Ezequiel Rodriguez <ezequiel@yahoo.com>",
   "version": "0.9.0",
-  "main": "./src/index.js",
+  "main": "./lib/index.js",
   "license": "MIT",
   "bugs": "https://github.com/ezequiel/react-typeahead-component/issues",
   "repository": {
@@ -19,16 +19,21 @@
     "component"
   ],
   "files": [
-    "./dist/npm"
+    "dist",
+    "src",
+    "lib"
   ],
   "directories": {
     "lib": "./src",
     "example": "./example"
   },
   "scripts": {
-    "build": "browserify ./src/index.js -t reactify -t literalify -x react -s Typeahead -d",
-    "dist:dev": "npm --loglevel=silent run build > dist/react-typeahead-component.dev.js",
-    "dist:min": "npm --loglevel=silent run build -- -t [envify --NODE_ENV production] | uglifyjs -cmvb beautify=false,ascii_only=true - > dist/react-typeahead-component.min.js",
+    "build": "npm run build:lib && npm run dist:dev && npm run dist:min",
+    "build:lib": "babel src --out-dir lib",
+    "clean": "rimraf lib dist",
+    "dist:dev": "webpack src/index.js dist/react-typeahead-component.dev.js --config webpack.config.development.js",
+    "dist:min": "webpack src/index.js dist/react-typeahead-component.min.js --config webpack.config.production.js",
+    "prepublish": "npm run clean && npm run build",
     "test": "karma start",
     "test:dev": "karma start --no-single-run --browsers Chrome",
     "jsx": "jsx ./src ./dist/npm -x jsx -x js"
@@ -37,14 +42,13 @@
     "react": ">=0.13.1 <1.0.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.3.17",
+    "babel-core": "^6.3.17",
+    "babel-loader": "^6.2.0",
+    "babel-preset-react": "^6.3.13",
     "brfs": "^1.4.0",
-    "browserify": "^9.0.3",
-    "browserify-css": "^0.6.1",
-    "browserify-shim": "^3.8.6",
-    "envify": "^3.4.0",
     "insert-css": "^0.2.0",
     "karma": "^0.12.31",
-    "karma-browserify": "^4.1.2",
     "karma-chrome-launcher": "^0.1.7",
     "karma-cli": "^0.0.4",
     "karma-firefox-launcher": "^0.1.4",
@@ -55,14 +59,9 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-safari-launcher": "^0.1.1",
     "karma-sinon-chai": "^0.3.0",
-    "literalify": "^0.4.0",
     "mocha": "^2.2.4",
     "react-tools": "^0.13.1",
-    "reactify": "^1.0.0",
-    "uglify-js": "^2.4.20",
-    "watchify": "^2.4.0"
-  },
-  "literalify": {
-    "react": "window.React || require('react')"
+    "rimraf": "^2.4.4",
+    "webpack": "^1.12.9"
   }
 }

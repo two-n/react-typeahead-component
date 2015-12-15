@@ -2,7 +2,7 @@
 
 var React = require('react/addons'),
     TestUtils = React.addons.TestUtils,
-    AriaStatus = require('../aria_status.jsx');
+    AriaStatus = require('../aria_status');
 
 describe('AriaStatus', function() {
     describe('#setTextContent', function() {

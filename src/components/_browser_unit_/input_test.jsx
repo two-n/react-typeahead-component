@@ -2,7 +2,7 @@
 
 var React = require('react/addons'),
     TestUtils = React.addons.TestUtils,
-    Input = require('../input.jsx');
+    Input = require('../input');
 
 describe('Input', function() {
     describe('#componentDidUpdate', function() {

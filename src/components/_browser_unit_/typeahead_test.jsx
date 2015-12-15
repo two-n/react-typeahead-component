@@ -2,7 +2,7 @@
 
 var React = require('react/addons'),
     TestUtils = React.addons.TestUtils,
-    Typeahead = require('../typeahead.jsx');
+    Typeahead = require('../typeahead');
 
 describe('Typeahead', function() {
     // This is only required for tests which use `setSelectionRange`.

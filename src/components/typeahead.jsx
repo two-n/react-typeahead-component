@@ -1,8 +1,8 @@
 'use strict';
 
 var React = require('react'),
-    Input = require('./input.jsx'),
-    AriaStatus = require('./aria_status.jsx'),
+    Input = require('./input'),
+    AriaStatus = require('./aria_status'),
     getTextDirection = require('../utils/get_text_direction'),
     noop = function() {};
 
