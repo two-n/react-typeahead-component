@@ -61,4 +61,4 @@ var MyApp = React.createClass({
     }
 });
 
-React.render(<MyApp />, document.getElementById('yt-typeahead'));
+ReactDOM.render(<MyApp />, document.getElementById('yt-typeahead'));

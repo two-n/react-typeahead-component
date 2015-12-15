@@ -104,4 +104,4 @@ var MyApp = React.createClass({
     }
 });
 
-React.render(<MyApp />, document.getElementById('nf-typeahead'));
+ReactDOM.render(<MyApp />, document.getElementById('nf-typeahead'));

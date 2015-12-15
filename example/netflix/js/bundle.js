@@ -105,7 +105,7 @@ var MyApp = React.createClass({displayName: "MyApp",
     }
 });
 
-React.render(React.createElement(MyApp, null), document.getElementById('nf-typeahead'));
+ReactDOM.render(React.createElement(MyApp, null), document.getElementById('nf-typeahead'));
 
 },{"./components/OptionTemplate.jsx":2,"./utils/OptionWebAPIUtils":3,"rx":9}],2:[function(require,module,exports){
 var cx = require('classnames');
