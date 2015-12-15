@@ -23,10 +23,6 @@
     "src",
     "lib"
   ],
-  "directories": {
-    "lib": "./src",
-    "example": "./example"
-  },
   "scripts": {
     "build": "npm run build:lib && npm run dist:dev && npm run dist:min",
     "build:lib": "babel src --out-dir lib",
@@ -35,8 +31,7 @@
     "dist:min": "webpack src/index.js dist/react-typeahead-component.min.js --config webpack.config.production.js",
     "prepublish": "npm run clean && npm run build",
     "test": "karma start",
-    "test:dev": "karma start --no-single-run --browsers Chrome",
-    "jsx": "jsx ./src ./dist/npm -x jsx -x js"
+    "test:dev": "karma start --no-single-run --browsers Chrome"
   },
   "peerDependencies": {
     "react": ">=0.13.1 <1.0.0"
@@ -46,20 +41,23 @@
     "babel-core": "^6.3.17",
     "babel-loader": "^6.2.0",
     "babel-preset-react": "^6.3.13",
-    "brfs": "^1.4.0",
     "insert-css": "^0.2.0",
-    "karma": "^0.12.31",
-    "karma-chrome-launcher": "^0.1.7",
-    "karma-cli": "^0.0.4",
+    "karma": "^0.13.15",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-cli": "^0.1.1",
     "karma-firefox-launcher": "^0.1.4",
-    "karma-ie-launcher": "^0.1.5",
-    "karma-mocha": "^0.1.10",
+    "karma-ie-launcher": "^0.2.0",
+    "karma-mocha": "^0.2.1",
     "karma-mocha-reporter": "^1.0.2",
-    "karma-opera-launcher": "^0.1.0",
-    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-opera-launcher": "^0.3.0",
+    "karma-phantomjs-launcher": "^0.2.1",
     "karma-safari-launcher": "^0.1.1",
-    "karma-sinon-chai": "^0.3.0",
+    "karma-sinon-chai": "^1.1.0",
+    "karma-sourcemap-loader": "^0.3.6",
+    "karma-webpack": "^1.7.0",
     "mocha": "^2.2.4",
+    "react": "^0.13.3",
     "react-tools": "^0.13.1",
     "rimraf": "^2.4.4",
     "webpack": "^1.12.9"

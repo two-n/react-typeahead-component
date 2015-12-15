@@ -10,14 +10,12 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'sinon-chai', 'browserify'],
-
+    frameworks: ['mocha', 'sinon-chai'],
 
     // list of files / patterns to load in the browser
     files: [
         './test/polyfill/*.js',
-        './src/**/*.js?(x)',
-        './src/**/_browser_unit_/*.js?(x)'
+        './test/all.js'
     ],
 
 
@@ -29,7 +27,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        './src/**/*.js?(x)': ['browserify']
+        './test/all.js': ['webpack', 'sourcemap']
     },
 
 
@@ -68,12 +66,20 @@ module.exports = function(config) {
         output: 'autoWatch'
     },
 
-    browserify: {
-        debug: true,
-        transform: [
-            'reactify'
-        ],
-        extensions: ['.js', '.jsx']
+    webpack: {
+        devtool: "inline-source-map",
+        module: {
+            loaders: [
+            { test: /\.(js|jsx)$/, loaders: ['babel-loader'], exclude: /node_modules/ }
+            ]
+        },
+        resolve: {
+            extensions: ["", ".js", ".jsx"]
+        }
+    },
+
+    webpackServer: {
+        noInfo: true
     }
   });
 };
