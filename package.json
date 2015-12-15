@@ -34,7 +34,7 @@
     "test:dev": "karma start --no-single-run --browsers Chrome"
   },
   "peerDependencies": {
-    "react": ">=0.13.1 <1.0.0"
+    "react": ">=0.14.0 <1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
@@ -57,8 +57,8 @@
     "karma-sourcemap-loader": "^0.3.6",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.2.4",
-    "react": "^0.13.3",
-    "react-tools": "^0.13.1",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
     "rimraf": "^2.4.4",
     "webpack": "^1.12.9"
   }

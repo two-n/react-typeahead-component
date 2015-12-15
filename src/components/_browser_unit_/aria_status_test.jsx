@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react/addons'),
+    ReactDOM = require('react-dom'),
     TestUtils = React.addons.TestUtils,
     AriaStatus = require('../aria_status');
 
@@ -13,7 +14,7 @@ describe('AriaStatus', function() {
                 text = 'this is a test';
 
             ariaStatusInstance.setTextContent(text);
-            expect(React.findDOMNode(ariaStatusInstance).textContent).to.equal(text);
+            expect(ReactDOM.findDOMNode(ariaStatusInstance).textContent).to.equal(text);
         });
 
         it('should set the text content to an empty string when passed null/undefined', function() {
@@ -23,7 +24,7 @@ describe('AriaStatus', function() {
 
             [null, undefined].forEach(function(value) {
                 ariaStatusInstance.setTextContent(value);
-                expect(React.findDOMNode(ariaStatusInstance).textContent).to.equal('');
+                expect(ReactDOM.findDOMNode(ariaStatusInstance).textContent).to.equal('');
             });
         });
     });

@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react/addons'),
+    ReactDOM = require('react-dom'),
     TestUtils = React.addons.TestUtils,
     Input = require('../input');
 
@@ -17,7 +18,7 @@ describe('Input', function() {
                 inputInstance.setProps({
                     dir: value
                 }, function() {
-                    expect(React.findDOMNode(inputInstance).hasAttribute('dir')).to.be.false;
+                    expect(ReactDOM.findDOMNode(inputInstance).hasAttribute('dir')).to.be.false;
                     done();
                 });
             });
@@ -33,7 +34,7 @@ describe('Input', function() {
             inputInstance.setProps({
                 dir: 'ltr'
             }, function() {
-                expect(React.findDOMNode(inputInstance).hasAttribute('dir')).to.be.true;
+                expect(ReactDOM.findDOMNode(inputInstance).hasAttribute('dir')).to.be.true;
                 done();
             });
         });
@@ -117,11 +118,11 @@ describe('Input', function() {
         // We have to render into the body because `setSelectionRange`
         // doesn't work if the element isn't actually on the page.
         var renderIntoBody = function(instance) {
-            return React.render(instance, document.body);
+            return ReactDOM.render(instance, document.body);
         };
 
         afterEach(function() {
-            React.unmountComponentAtNode(document.body);
+            ReactDOM.unmountComponentAtNode(document.body);
         });
 
         it('should return `true` if the cursor is at the end', function() {
@@ -131,7 +132,7 @@ describe('Input', function() {
                         value={value}
                     />
                 ),
-                inputDOMNode = React.findDOMNode(inputInstance),
+                inputDOMNode = ReactDOM.findDOMNode(inputInstance),
                 startRange = value.length,
                 endRange = value.length;
 
@@ -146,7 +147,7 @@ describe('Input', function() {
                         value='ezequiel'
                     />
                 ),
-                inputDOMNode = React.findDOMNode(inputInstance);
+                inputDOMNode = ReactDOM.findDOMNode(inputInstance);
 
             inputDOMNode.setSelectionRange(0, 0);
 
@@ -160,7 +161,7 @@ describe('Input', function() {
                         value={value}
                     />
                 ),
-                inputDOMNode = React.findDOMNode(inputInstance),
+                inputDOMNode = ReactDOM.findDOMNode(inputInstance),
                 startRange = Math.floor(value.length / 2),
                 endRange = Math.floor(value.length / 2);
 

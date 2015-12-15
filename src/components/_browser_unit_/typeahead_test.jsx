@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react/addons'),
+    ReactDOM = require('react-dom'),
     TestUtils = React.addons.TestUtils,
     Typeahead = require('../typeahead');
 
@@ -9,7 +10,7 @@ describe('Typeahead', function() {
     // We have to render into the body because `setSelectionRange`
     // doesn't work if the element isn't actually on the page.
     var renderIntoBody = function(instance) {
-        return React.render(instance, document.body);
+        return ReactDOM.render(instance, document.body);
     };
 
     describe('#componentWillReceiveProps', function() {
@@ -483,7 +484,7 @@ describe('Typeahead', function() {
 
         describe('ArrowLeft', function() {
             afterEach(function() {
-                React.unmountComponentAtNode(document.body);
+                ReactDOM.unmountComponentAtNode(document.body);
             });
 
             describe('in rtl languages', function() {
@@ -503,7 +504,7 @@ describe('Typeahead', function() {
                             key: 'ArrowLeft'
                         },
                         inputDOMNode =
-                            React.findDOMNode(
+                            ReactDOM.findDOMNode(
                                 TestUtils.findRenderedDOMComponentWithClass(typeaheadInstance, 'react-typeahead-usertext')
                             ),
                         startRange = inputValue.length,
@@ -536,7 +537,7 @@ describe('Typeahead', function() {
                             key: 'ArrowLeft'
                         },
                         inputDOMNode =
-                            React.findDOMNode(
+                            ReactDOM.findDOMNode(
                                 TestUtils.findRenderedDOMComponentWithClass(typeaheadInstance, 'react-typeahead-usertext')
                             ),
                         startRange = Math.floor(inputValue.length / 2),
@@ -621,7 +622,7 @@ describe('Typeahead', function() {
 
         describe('ArrowRight', function() {
             afterEach(function() {
-                React.unmountComponentAtNode(document.body);
+                ReactDOM.unmountComponentAtNode(document.body);
             });
 
             describe('in ltr languages', function() {
@@ -641,7 +642,7 @@ describe('Typeahead', function() {
                             key: 'ArrowRight'
                         },
                         inputDOMNode =
-                            React.findDOMNode(
+                            ReactDOM.findDOMNode(
                                 TestUtils.findRenderedDOMComponentWithClass(typeaheadInstance, 'react-typeahead-usertext')
                             ),
                         startRange = inputValue.length,
@@ -678,7 +679,7 @@ describe('Typeahead', function() {
                             },
                         },
                         inputDOMNode =
-                            React.findDOMNode(
+                            ReactDOM.findDOMNode(
                                 TestUtils.findRenderedDOMComponentWithClass(typeaheadInstance, 'react-typeahead-usertext')
                             ),
                         startRange = Math.floor(inputValue.length / 2),
@@ -1133,7 +1134,7 @@ describe('Typeahead', function() {
         //     typeaheadInstance.handleChange({ target: { value: '' } });
         //
         //     typeaheadInstance.handleWindowClose({
-        //         target: React.findDOMNode(
+        //         target: ReactDOM.findDOMNode(
         //             TestUtils.findRenderedDOMComponentWithClass(typeaheadInstance, 'react-typeahead-options')
         //         )
         //     });
