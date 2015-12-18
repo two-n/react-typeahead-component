@@ -1,8 +1,8 @@
 'use strict';
 
-var React = require('react/addons'),
+var React = require('react'),
     ReactDOM = require('react-dom'),
-    TestUtils = React.addons.TestUtils,
+    TestUtils = require('react-addons-test-utils'),
     Input = require('../input');
 
 describe('Input', function() {
