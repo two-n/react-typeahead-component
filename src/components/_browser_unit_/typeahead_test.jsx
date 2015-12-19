@@ -1149,7 +1149,7 @@ describe('Typeahead', function() {
 
             typeaheadInstance.handleWindowClose({
                 // Pretend this object is a DOM node we know nothing about.
-                target: {}
+                target: document.createElement('div')
             });
 
             expect(typeaheadInstance.state.isHintVisible).to.be.false;
