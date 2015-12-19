@@ -7,34 +7,32 @@ var React = require('react'),
 
 describe('Input', function() {
     describe('#componentDidUpdate', function() {
-        it('should remove the `dir` attribute if re-rendered with a null/undefined value', function(done) {
-            var inputInstance = TestUtils.renderIntoDocument(
-                    <Input
-                        dir='rtl'
-                    />
-                );
+        var node, inputElement, inputInstance;
 
-            [null, undefined].forEach(function(value) {
-                inputInstance.setProps({
-                    dir: value
-                }, function() {
-                    expect(ReactDOM.findDOMNode(inputInstance).hasAttribute('dir')).to.be.false;
-                    done();
+        it('should remove the `dir` attribute if re-rendered with a null/undefined value', function(done) {
+            var div = document.createElement('div');
+            var inputInstance = ReactDOM.render(<Input dir='rtl' />, div);
+            var node = ReactDOM.findDOMNode(inputInstance);
+
+            var values = [null, undefined];
+            values.forEach(function(value, i) {
+                ReactDOM.render(<Input dir={value} />, div, function () {
+                    expect(node.hasAttribute('dir')).to.be.false;
+
+                    if (i === values.length-1) {
+                        done();
+                    }
                 });
             });
         });
 
         it('should not remove the `dir` attribute if re-rendered with a legit value', function(done) {
-            var inputInstance = TestUtils.renderIntoDocument(
-                    <Input
-                        dir='rtl'
-                    />
-                );
+            var div = document.createElement('div');
+            var inputInstance = ReactDOM.render(<Input dir='rtl' />, div);
+            var node = ReactDOM.findDOMNode(inputInstance);
 
-            inputInstance.setProps({
-                dir: 'ltr'
-            }, function() {
-                expect(ReactDOM.findDOMNode(inputInstance).hasAttribute('dir')).to.be.true;
+            ReactDOM.render(<Input dir='ltr' />, div, function () {
+                expect(node.hasAttribute('dir')).to.be.true;
                 done();
             });
         });

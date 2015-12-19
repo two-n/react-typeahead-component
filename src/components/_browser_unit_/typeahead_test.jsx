@@ -15,13 +15,15 @@ describe('Typeahead', function() {
 
     describe('#componentWillReceiveProps', function() {
         it('should set `isHintVisible` to false if there isn\'t something completeable', function(done) {
-            var typeaheadInstance = TestUtils.renderIntoDocument(
+            var div = document.createElement('div');
+            var typeaheadInstance = ReactDOM.render(
                     <Typeahead
                         inputValue='e'
                         handleHint={function() {
                             return 'ezequiel';
                         }}
-                    />
+                    />,
+                    div
                 );
 
             // Put Typeahead in a state where the hint is visible.
@@ -30,39 +32,49 @@ describe('Typeahead', function() {
             // The hint should be visible at this point.
             expect(typeaheadInstance.state.isHintVisible).to.be.true;
 
-            typeaheadInstance.setProps({
-                inputValue: 'm',
-                handleHint: function() {
-                    return '';
+            ReactDOM.render(
+                <Typeahead
+                    inputValue='m'
+                    handleHint={function() {
+                        return '';
+                    }}
+                />,
+                div,
+                function () {
+                    expect(typeaheadInstance.state.isHintVisible).to.be.false;
+                    done();
                 }
-            }, function() {
-                expect(typeaheadInstance.state.isHintVisible).to.be.false;
-                done();
-            });
+            );
         });
 
         it('should set `isHintVisible` to true if there is something completeable', function(done) {
-            var typeaheadInstance = TestUtils.renderIntoDocument(
+            var div = document.createElement('div');
+            var typeaheadInstance = ReactDOM.render(
                     <Typeahead
                         inputValue='m'
                         handleHint={function() {
                             return '';
                         }}
-                    />
+                    />,
+                    div
                 );
 
             // The hint should not be visible at this point.
             expect(typeaheadInstance.state.isHintVisible).to.be.false;
 
-            typeaheadInstance.setProps({
-                inputValue: 'e',
-                handleHint: function() {
-                    return 'ezequiel'
+            ReactDOM.render(
+                <Typeahead
+                    inputValue='e'
+                    handleHint={function() {
+                        return 'ezequiel'
+                    }}
+                />,
+                div,
+                function () {
+                    expect(typeaheadInstance.state.isHintVisible).to.be.true;
+                    done();
                 }
-            }, function() {
-                expect(typeaheadInstance.state.isHintVisible).to.be.true;
-                done();
-            });
+            )
         });
     });
 
