@@ -115,20 +115,32 @@ describe('Input', function() {
         // This is only required for tests which use `setSelectionRange`.
         // We have to render into the body because `setSelectionRange`
         // doesn't work if the element isn't actually on the page.
-        var renderIntoBody = function(instance) {
-            return ReactDOM.render(instance, document.body);
-        };
+        // With React >= 0.14 rendering into document.body outputs a warning,
+        // use a div inside an iframe instead. (http://yahooeng.tumblr.com/post/102274727496/to-testutil-or-not-to-testutil)
+
+        beforeEach(function () {
+            this.iframe = document.createElement('iframe');
+            document.body.appendChild(this.iframe);
+
+            this.iframeDiv = document.createElement('div');
+            this.iframe.contentDocument.body.appendChild(this.iframeDiv);
+        });
 
         afterEach(function() {
-            ReactDOM.unmountComponentAtNode(document.body);
+            ReactDOM.unmountComponentAtNode(this.iframeDiv);
+            delete this.iframeDiv;
+
+            document.body.removeChild(this.iframe);
+            delete this.iframe;
         });
 
         it('should return `true` if the cursor is at the end', function() {
             var value = 'ezequiel',
-                inputInstance = renderIntoBody(
+                inputInstance = ReactDOM.render(
                     <Input
                         value={value}
-                    />
+                    />,
+                    this.iframeDiv
                 ),
                 inputDOMNode = ReactDOM.findDOMNode(inputInstance),
                 startRange = value.length,
@@ -140,10 +152,11 @@ describe('Input', function() {
         });
 
         it('should return `false` if the cursor is at the beginning', function() {
-            var inputInstance = renderIntoBody(
+            var inputInstance = ReactDOM.render(
                     <Input
                         value='ezequiel'
-                    />
+                    />,
+                    this.iframeDiv
                 ),
                 inputDOMNode = ReactDOM.findDOMNode(inputInstance);
 
@@ -154,10 +167,11 @@ describe('Input', function() {
 
         it('should return `false` if the cursor is in the middle', function() {
             var value = 'ezequiel',
-                inputInstance = renderIntoBody(
+                inputInstance = ReactDOM.render(
                     <Input
                         value={value}
-                    />
+                    />,
+                    this.iframeDiv
                 ),
                 inputDOMNode = ReactDOM.findDOMNode(inputInstance),
                 startRange = Math.floor(value.length / 2),
@@ -170,18 +184,20 @@ describe('Input', function() {
         });
 
         it('should return `true` if the `value` is empty', function() {
-            var inputInstance = renderIntoBody(
+            var inputInstance = ReactDOM.render(
                     <Input
                         value=''
-                    />
+                    />,
+                    this.iframeDiv
                 );
 
             expect(inputInstance.isCursorAtEnd()).to.be.true;
         });
 
         it('should return `true` if there is no `value`', function() {
-            var inputInstance = renderIntoBody(
-                    <Input />
+            var inputInstance = ReactDOM.render(
+                    <Input />,
+                    this.iframeDiv
                 );
 
             expect(inputInstance.isCursorAtEnd()).to.be.true;
