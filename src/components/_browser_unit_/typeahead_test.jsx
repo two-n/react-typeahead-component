@@ -1,27 +1,49 @@
 'use strict';
 
-var React = require('react/addons'),
+var React = require('react'),
     ReactDOM = require('react-dom'),
-    TestUtils = React.addons.TestUtils,
+    TestUtils = require('react-addons-test-utils'),
     Typeahead = require('../typeahead');
 
 describe('Typeahead', function() {
     // This is only required for tests which use `setSelectionRange`.
     // We have to render into the body because `setSelectionRange`
     // doesn't work if the element isn't actually on the page.
-    var renderIntoBody = function(instance) {
-        return ReactDOM.render(instance, document.body);
-    };
+    // With React >= 0.14 rendering into document.body outputs a warning,
+    // use a div inside an iframe instead. (http://yahooeng.tumblr.com/post/102274727496/to-testutil-or-not-to-testutil)
+
+    var setupIframe = function () {
+        this.iframe = document.createElement('iframe');
+        document.body.appendChild(this.iframe);
+
+        this.iframeDiv = document.createElement('div');
+        this.iframe.contentDocument.body.appendChild(this.iframeDiv);
+    }
+
+    afterEach(function () {
+        if (this.iframeDiv) {
+            ReactDOM.unmountComponentAtNode(this.iframeDiv);
+            delete this.iframeDiv;
+        }
+
+        if (this.iframe) {
+            ReactDOM.unmountComponentAtNode(this.iframe.contentDocument.body);
+            document.body.removeChild(this.iframe);
+            delete this.iframe;
+        }
+    })
 
     describe('#componentWillReceiveProps', function() {
         it('should set `isHintVisible` to false if there isn\'t something completeable', function(done) {
-            var typeaheadInstance = TestUtils.renderIntoDocument(
+            var div = document.createElement('div');
+            var typeaheadInstance = ReactDOM.render(
                     <Typeahead
                         inputValue='e'
                         handleHint={function() {
                             return 'ezequiel';
                         }}
-                    />
+                    />,
+                    div
                 );
 
             // Put Typeahead in a state where the hint is visible.
@@ -30,39 +52,49 @@ describe('Typeahead', function() {
             // The hint should be visible at this point.
             expect(typeaheadInstance.state.isHintVisible).to.be.true;
 
-            typeaheadInstance.setProps({
-                inputValue: 'm',
-                handleHint: function() {
-                    return '';
+            ReactDOM.render(
+                <Typeahead
+                    inputValue='m'
+                    handleHint={function() {
+                        return '';
+                    }}
+                />,
+                div,
+                function () {
+                    expect(typeaheadInstance.state.isHintVisible).to.be.false;
+                    done();
                 }
-            }, function() {
-                expect(typeaheadInstance.state.isHintVisible).to.be.false;
-                done();
-            });
+            );
         });
 
         it('should set `isHintVisible` to true if there is something completeable', function(done) {
-            var typeaheadInstance = TestUtils.renderIntoDocument(
+            var div = document.createElement('div');
+            var typeaheadInstance = ReactDOM.render(
                     <Typeahead
                         inputValue='m'
                         handleHint={function() {
                             return '';
                         }}
-                    />
+                    />,
+                    div
                 );
 
             // The hint should not be visible at this point.
             expect(typeaheadInstance.state.isHintVisible).to.be.false;
 
-            typeaheadInstance.setProps({
-                inputValue: 'e',
-                handleHint: function() {
-                    return 'ezequiel'
+            ReactDOM.render(
+                <Typeahead
+                    inputValue='e'
+                    handleHint={function() {
+                        return 'ezequiel'
+                    }}
+                />,
+                div,
+                function () {
+                    expect(typeaheadInstance.state.isHintVisible).to.be.true;
+                    done();
                 }
-            }, function() {
-                expect(typeaheadInstance.state.isHintVisible).to.be.true;
-                done();
-            });
+            )
         });
     });
 
@@ -483,22 +515,23 @@ describe('Typeahead', function() {
         });
 
         describe('ArrowLeft', function() {
-            afterEach(function() {
-                ReactDOM.unmountComponentAtNode(document.body);
+            beforeEach(function() {
+                setupIframe.call(this);
             });
 
             describe('in rtl languages', function() {
                 it('should complete the hint if it is visible', function() {
                     var inputValue = 'شزذ',
                         handleComplete = sinon.spy(),
-                        typeaheadInstance = renderIntoBody(
+                        typeaheadInstance = ReactDOM.render(
                             <Typeahead
                                 inputValue={inputValue}
                                 handleHint={function() {
                                     return 'شزذيثب';
                                 }}
                                 onComplete={handleComplete}
-                            />
+                            />,
+                            this.iframeDiv
                         ),
                         eventData = {
                             key: 'ArrowLeft'
@@ -524,14 +557,15 @@ describe('Typeahead', function() {
                 it('should not complete the hint if the cursor is not at the end', function() {
                     var handleComplete = sinon.spy(),
                         inputValue = 'شزذ',
-                        typeaheadInstance = renderIntoBody(
+                        typeaheadInstance = ReactDOM.render(
                             <Typeahead
                                 inputValue={inputValue}
                                 handleHint={function() {
                                     return 'ezequiel';
                                 }}
                                 onComplete={handleComplete}
-                            />
+                            />,
+                            this.iframeDiv
                         ),
                         eventData = {
                             key: 'ArrowLeft'
@@ -621,22 +655,23 @@ describe('Typeahead', function() {
         });
 
         describe('ArrowRight', function() {
-            afterEach(function() {
-                ReactDOM.unmountComponentAtNode(document.body);
+            beforeEach(function() {
+                setupIframe.call(this);
             });
 
             describe('in ltr languages', function() {
                 it('should complete the hint if it is visible', function() {
                     var inputValue = 'eze',
                         handleComplete = sinon.spy(),
-                        typeaheadInstance = renderIntoBody(
+                        typeaheadInstance = ReactDOM.render(
                             <Typeahead
                                 inputValue={inputValue}
                                 handleHint={function() {
                                     return 'ezequiel';
                                 }}
                                 onComplete={handleComplete}
-                            />
+                            />,
+                            this.iframeDiv
                         ),
                         eventData = {
                             key: 'ArrowRight'
@@ -663,14 +698,15 @@ describe('Typeahead', function() {
                 it('should not complete the hint if the cursor is not at the end', function() {
                     var handleComplete = sinon.spy(),
                         inputValue = 'eze',
-                        typeaheadInstance = renderIntoBody(
+                        typeaheadInstance = ReactDOM.render(
                             <Typeahead
                                 inputValue={inputValue}
                                 handleHint={function() {
                                     return 'ezequiel';
                                 }}
                                 onComplete={handleComplete}
-                            />
+                            />,
+                            this.iframeDiv
                         ),
                         eventData = {
                             key: 'ArrowRight',
@@ -1113,7 +1149,7 @@ describe('Typeahead', function() {
 
             typeaheadInstance.handleWindowClose({
                 // Pretend this object is a DOM node we know nothing about.
-                target: {}
+                target: document.createElement('div')
             });
 
             expect(typeaheadInstance.state.isHintVisible).to.be.false;

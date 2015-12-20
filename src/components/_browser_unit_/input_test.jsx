@@ -1,40 +1,38 @@
 'use strict';
 
-var React = require('react/addons'),
+var React = require('react'),
     ReactDOM = require('react-dom'),
-    TestUtils = React.addons.TestUtils,
+    TestUtils = require('react-addons-test-utils'),
     Input = require('../input');
 
 describe('Input', function() {
     describe('#componentDidUpdate', function() {
-        it('should remove the `dir` attribute if re-rendered with a null/undefined value', function(done) {
-            var inputInstance = TestUtils.renderIntoDocument(
-                    <Input
-                        dir='rtl'
-                    />
-                );
+        var node, inputElement, inputInstance;
 
-            [null, undefined].forEach(function(value) {
-                inputInstance.setProps({
-                    dir: value
-                }, function() {
-                    expect(ReactDOM.findDOMNode(inputInstance).hasAttribute('dir')).to.be.false;
-                    done();
+        it('should remove the `dir` attribute if re-rendered with a null/undefined value', function(done) {
+            var div = document.createElement('div');
+            var inputInstance = ReactDOM.render(<Input dir='rtl' />, div);
+            var node = ReactDOM.findDOMNode(inputInstance);
+
+            var values = [null, undefined];
+            values.forEach(function(value, i) {
+                ReactDOM.render(<Input dir={value} />, div, function () {
+                    expect(node.hasAttribute('dir')).to.be.false;
+
+                    if (i === values.length-1) {
+                        done();
+                    }
                 });
             });
         });
 
         it('should not remove the `dir` attribute if re-rendered with a legit value', function(done) {
-            var inputInstance = TestUtils.renderIntoDocument(
-                    <Input
-                        dir='rtl'
-                    />
-                );
+            var div = document.createElement('div');
+            var inputInstance = ReactDOM.render(<Input dir='rtl' />, div);
+            var node = ReactDOM.findDOMNode(inputInstance);
 
-            inputInstance.setProps({
-                dir: 'ltr'
-            }, function() {
-                expect(ReactDOM.findDOMNode(inputInstance).hasAttribute('dir')).to.be.true;
+            ReactDOM.render(<Input dir='ltr' />, div, function () {
+                expect(node.hasAttribute('dir')).to.be.true;
                 done();
             });
         });
@@ -117,20 +115,32 @@ describe('Input', function() {
         // This is only required for tests which use `setSelectionRange`.
         // We have to render into the body because `setSelectionRange`
         // doesn't work if the element isn't actually on the page.
-        var renderIntoBody = function(instance) {
-            return ReactDOM.render(instance, document.body);
-        };
+        // With React >= 0.14 rendering into document.body outputs a warning,
+        // use a div inside an iframe instead. (http://yahooeng.tumblr.com/post/102274727496/to-testutil-or-not-to-testutil)
+
+        beforeEach(function () {
+            this.iframe = document.createElement('iframe');
+            document.body.appendChild(this.iframe);
+
+            this.iframeDiv = document.createElement('div');
+            this.iframe.contentDocument.body.appendChild(this.iframeDiv);
+        });
 
         afterEach(function() {
-            ReactDOM.unmountComponentAtNode(document.body);
+            ReactDOM.unmountComponentAtNode(this.iframeDiv);
+            delete this.iframeDiv;
+
+            document.body.removeChild(this.iframe);
+            delete this.iframe;
         });
 
         it('should return `true` if the cursor is at the end', function() {
             var value = 'ezequiel',
-                inputInstance = renderIntoBody(
+                inputInstance = ReactDOM.render(
                     <Input
                         value={value}
-                    />
+                    />,
+                    this.iframeDiv
                 ),
                 inputDOMNode = ReactDOM.findDOMNode(inputInstance),
                 startRange = value.length,
@@ -142,10 +152,11 @@ describe('Input', function() {
         });
 
         it('should return `false` if the cursor is at the beginning', function() {
-            var inputInstance = renderIntoBody(
+            var inputInstance = ReactDOM.render(
                     <Input
                         value='ezequiel'
-                    />
+                    />,
+                    this.iframeDiv
                 ),
                 inputDOMNode = ReactDOM.findDOMNode(inputInstance);
 
@@ -156,10 +167,11 @@ describe('Input', function() {
 
         it('should return `false` if the cursor is in the middle', function() {
             var value = 'ezequiel',
-                inputInstance = renderIntoBody(
+                inputInstance = ReactDOM.render(
                     <Input
                         value={value}
-                    />
+                    />,
+                    this.iframeDiv
                 ),
                 inputDOMNode = ReactDOM.findDOMNode(inputInstance),
                 startRange = Math.floor(value.length / 2),
@@ -172,18 +184,20 @@ describe('Input', function() {
         });
 
         it('should return `true` if the `value` is empty', function() {
-            var inputInstance = renderIntoBody(
+            var inputInstance = ReactDOM.render(
                     <Input
                         value=''
-                    />
+                    />,
+                    this.iframeDiv
                 );
 
             expect(inputInstance.isCursorAtEnd()).to.be.true;
         });
 
         it('should return `true` if there is no `value`', function() {
-            var inputInstance = renderIntoBody(
-                    <Input />
+            var inputInstance = ReactDOM.render(
+                    <Input />,
+                    this.iframeDiv
                 );
 
             expect(inputInstance.isCursorAtEnd()).to.be.true;
