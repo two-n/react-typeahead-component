@@ -2,7 +2,7 @@
   "name": "@tappleby/react-typeahead-component",
   "description": "Typeahead, written using the React.js library.",
   "author": "Ezequiel Rodriguez <ezequiel@yahoo.com>",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "main": "./lib/index.js",
   "license": "MIT",
   "bugs": "https://github.com/ezequiel/react-typeahead-component/issues",
@@ -34,7 +34,7 @@
     "test:dev": "karma start --no-single-run --browsers Chrome"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0-rc.1"
+    "react": "^0.14.0 || ^15.0.0-0"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
