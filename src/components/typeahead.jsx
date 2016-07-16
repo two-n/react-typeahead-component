@@ -87,7 +87,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         var _this = this,
-            uniqueId = this.constructor.getInstanceCount();
+            uniqueId = this.props.inputId || this.constructor.getInstanceCount();
 
         _this.userInputValue = null;
         _this.previousInputValue = null;
