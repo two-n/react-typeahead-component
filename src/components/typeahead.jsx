@@ -429,6 +429,11 @@ module.exports = React.createClass({
                     dir = key === 'ArrowUp' ? -1: 1;
                     hasHandledKeyDown = true;
 
+                    // Prevent synthetic event is reuse - https://fb.me/react-event-pooling
+                    if (typeof event.persist === 'function') {
+                        event.persist();
+                    }
+
                     _this.navigate(dir, function() {
                         var selectedIndex = _this.state.selectedIndex,
                             previousInputValue = _this.previousInputValue,
