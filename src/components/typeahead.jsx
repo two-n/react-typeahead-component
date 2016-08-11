@@ -116,7 +116,7 @@ module.exports = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        var nextValue = nextProps.inputValue,
+        var nextValue = nextProps.inputValue || '',
             nextOptions = nextProps.options,
             valueLength = nextValue.length,
             isHintVisible = valueLength > 0 &&
