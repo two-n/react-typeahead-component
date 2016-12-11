@@ -338,11 +338,11 @@ module.exports = React.createClass({
     handleChange: function(event) {
         var _this = this;
 
+        _this.props.onChange(event);
+        _this.userInputValue = event.target.value;
         _this.showHint();
         _this.showDropdown();
         _this.setSelectedIndex(-1);
-        _this.props.onChange(event);
-        _this.userInputValue = event.target.value;
     },
 
     focus: function() {
