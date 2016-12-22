@@ -21,14 +21,11 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.(js|jsx)$/, loaders: ['babel-loader'], exclude: /node_modules/ }
+      { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/ }
     ]
   },
   output: {
     library: 'Typeahead',
     libraryTarget: 'umd'
-  },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
   }
 };

@@ -1,4 +1,4 @@
-var OptionTemplate = require('./components/OptionTemplate.jsx');
+var OptionTemplate = require('./components/OptionTemplate');
 var OptionWebAPIUtils = require('./utils/OptionWebAPIUtils');
 var Rx = require('rx');
 

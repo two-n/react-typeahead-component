@@ -1,6 +1,6 @@
 var OptionStore = require('./stores/OptionStore');
 var OptionActions = require('./actions/OptionActions');
-var OptionTemplate = require('./components/OptionTemplate.jsx');
+var OptionTemplate = require('./components/OptionTemplate');
 var throttle = require('lodash.throttle');
 
 var MyApp = React.createClass({

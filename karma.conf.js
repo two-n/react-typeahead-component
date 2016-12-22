@@ -70,11 +70,8 @@ module.exports = function(config) {
         devtool: "inline-source-map",
         module: {
             loaders: [
-            { test: /\.(js|jsx)$/, loaders: ['babel-loader'], exclude: /node_modules/ }
+            { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/ }
             ]
-        },
-        resolve: {
-            extensions: ["", ".js", ".jsx"]
         }
     },
 

@@ -100,7 +100,7 @@ When instantiated, it is passed these props:
 **Example**:
 
 ```jsx
-// OptionTemplate.jsx
+// OptionTemplate.js
 module.exports = React.createClass({
     render: function() {
         var bgColor = null;
@@ -121,7 +121,7 @@ module.exports = React.createClass({
 });
 
 // Then in your main app...
-var OptionTemplate = require('./OptionTemplate.jsx');
+var OptionTemplate = require('./OptionTemplate.js');
 
 <Typeahead
     optionTemplate={OptionTemplate}
