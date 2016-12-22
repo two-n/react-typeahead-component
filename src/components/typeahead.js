@@ -2,7 +2,6 @@
 
 var React = require('react'),
     ReactDOM = require('react-dom'),
-    Input = require('./input'),
     AriaStatus = require('./aria_status'),
     getTextDirection = require('../utils/get_text_direction'),
     noop = function() {};
@@ -160,7 +159,7 @@ module.exports = React.createClass({
                     position: 'relative'
                 }}
                 className='react-typeahead-input-container'>
-                <Input
+                <input
                     disabled={true}
                     role='presentation'
                     aria-hidden={true}
@@ -173,7 +172,7 @@ module.exports = React.createClass({
                     }}
                     value={state.isHintVisible ? props.handleHint(inputValue, props.options) : undefined}
                 />
-                <Input
+                <input
                     ref='input'
                     role='combobox'
                     aria-owns={_this.optionsId}
@@ -400,7 +399,11 @@ module.exports = React.createClass({
             break;
         case 'ArrowLeft':
         case 'ArrowRight':
-            if (isHintVisible && !event.shiftKey && input.isCursorAtEnd()) {
+            var valueLength = inputValue.length;
+            var isCursorAtEnd = input.selectionStart === valueLength &&
+                    input.selectionEnd === valueLength;
+
+            if (isHintVisible && !event.shiftKey && isCursorAtEnd) {
                 dir = getTextDirection(props.inputValue);
 
                 if ((dir === 'ltr' && key === 'ArrowRight') || (dir === 'rtl' && key === 'ArrowLeft')) {
